@@ -12,13 +12,17 @@ Library files: *.emp
 [IDFv3](https://www.simplifiedsolutionsinc.com/images/idf_v30_spec.pdf)
 
 ## Usage
-'''
+```
 var idf = new IDFBoardFile(@"IdfBoardFile.emn");
-idf.ConvertUnitsTo(IDFv3Net.Sections.Units.THOU);
+
+idf.ConvertUnitsTo(Units.THOU);
+
 idf.Scale(0.5f, 0.5f);
 idf.Translate(-100, 0);
 idf.Rotate(90);
 idf.FlipHorizontal();
+
 idf.Notes.Add(new Note() { TextValue = "Making changes!", Point = new Point(100,100) });
+
 idf.SaveAs("NewFile.emn");
-'''
+```
