@@ -1,5 +1,5 @@
 # IDFv3Net
-An easy to use library for working with IDFv3 files.
+An easy to use library for working with IDFv3 files in C#.NET
 Board / Panel Files: *.emn
 Library files: *.emp
 
@@ -8,8 +8,7 @@ Library files: *.emp
 - Converting units between THOU and MM
 - Geometry functions: translation, rotation, scaling, flip horizontal, flip vertical
 
-##Intermediate Data Format (IDF) Specification
-[IDFv3](https://www.simplifiedsolutionsinc.com/images/idf_v30_spec.pdf)
+[Intermediate Data Format (IDF) Specification](https://www.simplifiedsolutionsinc.com/images/idf_v30_spec.pdf)
 
 ## Usage
 ```
