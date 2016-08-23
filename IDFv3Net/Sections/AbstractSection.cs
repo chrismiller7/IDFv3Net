@@ -1,5 +1,7 @@
 ﻿using IDFv3Net.Attributes;
 using System.Reflection;
+using System.Linq;
+
 
 namespace IDFv3Net.Sections
 {
@@ -9,7 +11,7 @@ namespace IDFv3Net.Sections
         {
             get
             {
-                var attrib = this.GetType().GetCustomAttribute(typeof(SectionNameAttribute)) as SectionNameAttribute;
+                var attrib = this.GetType().GetCustomAttributes(true).OfType<SectionNameAttribute>().SingleOrDefault();
                 return attrib.Name;
             }
         }

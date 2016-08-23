@@ -12,7 +12,12 @@ namespace IDFv3Net
 {
     public class IDFFile
     {
-        public AbstractSection[] Sections { get; private set; }
+        protected AbstractSection[] sections;
+
+        public IDFFile()
+        {
+            sections = new AbstractSection[0];
+        }
 
         public IDFFile(string file)
         {
@@ -36,15 +41,20 @@ namespace IDFv3Net
             ReadFile(file, fileType);
         }
 
+        public virtual AbstractSection[] GetAllSections()
+        {
+            return this.sections;
+        }
+
         void ReadFile(string file, SectionFileType fileType)
         {
             IDFFileParser parser = new IDFFileParser(file);
-            this.Sections = parser.Sections.Select(s => ReadSection(s, fileType)).ToArray();
+            this.sections = parser.Sections.Select(s => ReadSection(s, fileType)).ToArray();
         }
 
         public IDFFile(AbstractSection[] sections)
         {
-            this.Sections = sections;
+            this.sections = sections;
         }
 
         AbstractSection ReadSection(IDFFileSection parser, SectionFileType fileType)
@@ -65,7 +75,7 @@ namespace IDFv3Net
         {
             foreach (var field in section.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance))
             {
-                if (field.GetCustomAttribute<RecordAttribute>() != null)
+                if (field.GetCustomAttributes(true).OfType<NextRecordAttribute>().Count() > 0)
                 {
                     parser.NextRecord();
                 }
@@ -93,10 +103,7 @@ namespace IDFv3Net
                 }
                 else
                 {
-                    var fieldIdx = parser.FieldIdx;
-                    var fieldStr = parser.NextField();
-
-                    SetFieldValue(field, section, fieldStr);
+                    SetFieldValue(parser, field, section);
                 }
             }
         }
@@ -106,28 +113,31 @@ namespace IDFv3Net
             return A.Equals(B);
         }
 
-        void SetFieldValue(FieldInfo field, object section, string fieldStr)
+        void SetFieldValue(IDFFileSection parser, FieldInfo field, object section)
         {
             if (field.FieldType == typeof(string))
             {
-                field.SetValue(section, fieldStr);
+                field.SetValue(section, parser.NextField());
             }
             else if (field.FieldType == typeof(int))
             {
-                field.SetValue(section, int.Parse(fieldStr));
+                field.SetValue(section, int.Parse(parser.NextField()));
             }
             else if (field.FieldType == typeof(float))
             {
-                field.SetValue(section, float.Parse(fieldStr));
+                field.SetValue(section, float.Parse(parser.NextField()));
             }
             else if (field.FieldType.IsEnum)
             {
-                var val = Enum.Parse(field.FieldType, fieldStr, true);
+                var val = Enum.Parse(field.FieldType, parser.NextField(), true);
                 field.SetValue(section, val);
             }
             else
             {
-                throw new Exception("Type not supported: " + field.FieldType);
+                var obj = Activator.CreateInstance(field.FieldType);
+                PopulateFields(parser, obj);
+                field.SetValue(section, obj);
+                //throw new Exception("Type not supported: " + field.FieldType);
             }
         }
 
@@ -135,7 +145,7 @@ namespace IDFv3Net
         {
             foreach (Type type in Assembly.GetAssembly(typeof(SectionNameAttribute)).GetTypes())
             {
-                var section = type.GetCustomAttribute(typeof(SectionNameAttribute)) as SectionNameAttribute;
+                var section = type.GetCustomAttributes(true).OfType<SectionNameAttribute>().SingleOrDefault();
    
                 if (section != null && section.Name.ToLower() == sectionName.ToLower().TrimStart('.') && section.FileType == fileType)
                 {

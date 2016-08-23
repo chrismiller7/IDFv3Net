@@ -3,14 +3,15 @@
 namespace IDFv3Net.Sections
 {
     [SectionName("MECHANICAL", SectionFileType.Library)]
-    class MechanicalComponentSection : AbstractSection
+    public class MechanicalComponentSection : AbstractSection
     {
-        [Record]
-        public string GeometeryName;
-        public string PartNumber;
-        public Units Units;
-        public float ComponentHeight;
+        [NextRecord]
+        public string GeometeryName = "";
+        public string PartNumber = "";
+        public Units Units = Units.THOU;
+        [LengthUnit]
+        public float ComponentHeight = 0;
 
-        public OutlinePoint[] Points;
+        public Geometry[] Geometry = new Geometry[0];
     }
 }

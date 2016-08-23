@@ -3,13 +3,13 @@
 namespace IDFv3Net.Sections
 {
     [SectionName("HEADER", SectionFileType.Library)]
-    class LibraryHeaderSection : AbstractSection
+    public class LibraryHeaderSection : AbstractSection
     {
-        [Record]
-        public FileType FileType;
-        public float IDFVersionNumber;
-        public string SourceSystemId;
-        public string Date;
-        public int LibraryFileVersion;
+        [NextRecord]
+        public FileType FileType = FileType.LIBRARY_FILE;
+        public float IDFVersionNumber = 0;
+        public string SourceSystemId = "";
+        public string Date= "";
+        public int LibraryFileVersion = 0;
     }
 }

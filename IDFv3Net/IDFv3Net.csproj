@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>IDFv3Net</RootNamespace>
     <AssemblyName>IDFv3Net</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,30 +41,42 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\LengthUnitAttribute.cs" />
     <Compile Include="Attributes\Record.cs" />
     <Compile Include="Attributes\SectionName.cs" />
-    <Compile Include="Sections\BoardPanel\AbstractSection.cs" />
-    <Compile Include="Sections\BoardPanel\BoardPanelOutlineSection.cs" />
-    <Compile Include="Sections\BoardPanel\ComponentPlacementSection.cs" />
-    <Compile Include="Sections\BoardPanel\DrilledHolesSection.cs" />
-    <Compile Include="Sections\BoardPanel\Enums.cs" />
-    <Compile Include="Sections\BoardPanel\HeaderSection.cs" />
-    <Compile Include="Sections\BoardPanel\NotesSection.cs" />
-    <Compile Include="Sections\BoardPanel\OtherOutlineSections.cs" />
-    <Compile Include="Sections\BoardPanel\PlacementGroupAreaSection.cs" />
-    <Compile Include="Sections\BoardPanel\PlacementKeepoutSection.cs" />
-    <Compile Include="Sections\BoardPanel\PlacementOutlineSection.cs" />
-    <Compile Include="Sections\BoardPanel\RoutingKeepoutSection.cs" />
-    <Compile Include="Sections\BoardPanel\RoutingOutlineSection.cs" />
+    <Compile Include="Extensions\ConvertUnitsToExtensions.cs" />
+    <Compile Include="Extensions\ExportExtensions.cs" />
+    <Compile Include="Extensions\GeometeryExtensions.cs" />
+    <Compile Include="Extensions\HeaderExtensions.cs" />
+    <Compile Include="IDFPanelFile.cs" />
+    <Compile Include="IDFBoardFile.cs" />
+    <Compile Include="IDFBoardPanelCommonFile.cs" />
+    <Compile Include="IDFLibraryFile.cs" />
+    <Compile Include="Sections\AbstractSection.cs" />
+    <Compile Include="Sections\BoardAndPanel\BoardOutlineSection.cs" />
+    <Compile Include="Sections\BoardAndPanel\PanelOutlineSection.cs" />
+    <Compile Include="Sections\BoardAndPanel\ComponentPlacementSection.cs" />
+    <Compile Include="Sections\BoardAndPanel\DrilledHolesSection.cs" />
+    <Compile Include="Sections\Enums.cs" />
+    <Compile Include="Sections\BoardAndPanel\HeaderSection.cs" />
+    <Compile Include="Sections\BoardAndPanel\NotesSection.cs" />
+    <Compile Include="Sections\BoardAndPanel\OtherOutlineSections.cs" />
+    <Compile Include="Sections\BoardAndPanel\PlacementGroupAreaSection.cs" />
+    <Compile Include="Sections\BoardAndPanel\PlacementKeepoutSection.cs" />
+    <Compile Include="Sections\BoardAndPanel\PlacementOutlineSection.cs" />
+    <Compile Include="Sections\BoardAndPanel\RoutingKeepoutSection.cs" />
+    <Compile Include="Sections\BoardAndPanel\RoutingOutlineSection.cs" />
     <Compile Include="IDFFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sections\BoardPanel\ViaKeepoutSection.cs" />
+    <Compile Include="Sections\BoardAndPanel\ViaKeepoutSection.cs" />
     <Compile Include="Internal\IDFFileParser.cs" />
     <Compile Include="Internal\IDFFileSection.cs" />
     <Compile Include="Internal\ParserHelper.cs" />
+    <Compile Include="Sections\Geometry.cs" />
     <Compile Include="Sections\Library\ElectricalComponentSection.cs" />
     <Compile Include="Sections\Library\HeaderSection.cs" />
     <Compile Include="Sections\Library\MechanicalComponentSection.cs" />
+    <Compile Include="Sections\Point.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

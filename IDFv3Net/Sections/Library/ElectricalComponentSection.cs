@@ -3,25 +3,26 @@
 namespace IDFv3Net.Sections
 {
     [SectionName("ELECTRICAL", SectionFileType.Library)]
-    class ElectricalComponentSection : AbstractSection
+    public class ElectricalComponentSection : AbstractSection
     {
-        [Record]
-        public string GeometeryName;
-        public string PartNumber;
-        public Units Units;
-        public float ComponentHeight;
+        [NextRecord]
+        public string GeometeryName = "";
+        public string PartNumber = "";
+        public Units Units = Units.THOU;
+        [LengthUnit]
+        public float ComponentHeight = 0;
 
-        public OutlinePoint[] Points;
+        public Geometry[] Geometry = new  Geometry[0];
 
-        public Property[] Properties;
+        public Property[] Properties = new Property[0];
     }
 
-    class Property
+    public class Property
     {
-        [Record]
+        [NextRecord]
         public string PropertyKeyword = "PROP";
-        public string PropertyName;
-        public string PropertyValue;
+        public string PropertyName = "";
+        public string PropertyValue = "";
     }
 
 }

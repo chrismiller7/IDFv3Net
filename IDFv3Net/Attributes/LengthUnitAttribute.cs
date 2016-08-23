@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace IDFv3Net.Attributes
 {
-    class NextRecordAttribute : Attribute
+    public class LengthUnitAttribute: Attribute
     {
-        public NextRecordAttribute()
-        {
-        }
     }
 }
