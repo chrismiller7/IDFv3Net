@@ -21,7 +21,7 @@ namespace IDFv3Net.Sections
         [LengthUnit]
         public float MountingOffset=0;
         public float RotationAngle=0;
-        public OtherOutlineBoardSide SideOfBoard = OtherOutlineBoardSide.TOP;
+        public ComponentPlacementSide SideOfBoard = ComponentPlacementSide.TOP;
         public PlacementStatus PlacementStatus = PlacementStatus.PLACED;
     }
 }

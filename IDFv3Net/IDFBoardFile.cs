@@ -5,7 +5,7 @@ using IDFv3Net.Sections;
 
 namespace IDFv3Net
 {
-    public class IDFBoardFile : IDFBoardLibraryCommonFile
+    public class IDFBoardFile : IDFBoardPanelCommonFile
     {
         public BoardOutlineSection BoardOutline { get; private set; }
 
@@ -16,6 +16,7 @@ namespace IDFv3Net
 
         public IDFBoardFile(string file) : base(file)
         {
+            if (Header.FileType != FileType.BOARD_FILE) throw new Exception("FileType is not a Board file.");
             BoardOutline = this.sections.OfType<BoardOutlineSection>().SingleOrDefault();
             if (BoardOutline == null) throw new Exception("BoardOutline section not found in file");
         }

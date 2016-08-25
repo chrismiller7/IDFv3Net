@@ -14,7 +14,7 @@ namespace IDFv3Net
     {
         protected AbstractSection[] sections;
 
-        public IDFFile()
+        protected IDFFile()
         {
             sections = new AbstractSection[0];
         }

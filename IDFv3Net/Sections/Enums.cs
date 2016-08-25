@@ -17,7 +17,7 @@
         MCAD,ECAD,UNOWNED,
     }
 
-    public enum OtherOutlineBoardSide
+    public enum ComponentPlacementSide
     {
         TOP,BOTTOM
     }

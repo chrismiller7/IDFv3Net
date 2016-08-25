@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace IDFv3Net
 {
-    public abstract class IDFBoardLibraryCommonFile : IDFFile
+    public abstract class IDFBoardPanelCommonFile : IDFFile
     {
         public HeaderSection Header { get; private set; }
         public List<OtherOutlineSection> OtherOutlines { get; private set; }
@@ -21,10 +21,14 @@ namespace IDFv3Net
         public List<Note> Notes { get; private set; }
         public List<ComponentPlacement> ComponentPlacements { get; private set; }
 
-        public IDFBoardLibraryCommonFile(FileType fileType) : base()
+        public IDFBoardPanelCommonFile(FileType fileType) : base()
         {
             Header = new HeaderSection();
             Header.FileType = fileType;
+            Header.IDFVersionNumber = 3;
+            Header.BoardFileVersion = 1;
+            Header.SourceSystemId = "";
+            Header.Units = Units.THOU;
 
             OtherOutlines = new List<OtherOutlineSection>();
             RoutingOutlines = new List<RoutingOutlineSection>();
@@ -38,7 +42,7 @@ namespace IDFv3Net
             ComponentPlacements = new List<Sections.ComponentPlacement>();
         }
 
-        public IDFBoardLibraryCommonFile(string file) : base(file, SectionFileType.BoardPanel)
+        public IDFBoardPanelCommonFile(string file) : base(file, SectionFileType.BoardPanel)
         {
             Header = this.sections.OfType<HeaderSection>().SingleOrDefault();
             if (Header == null) throw new Exception("Header section not found"); 
@@ -50,23 +54,14 @@ namespace IDFv3Net
             PlacementKeepouts = this.sections.OfType<PlacementKeepoutSection>().ToList();
             PlacementGroupAreas = this.sections.OfType<PlacementGroupAreaSection>().ToList();
 
-            var drilledHolesSection = this.sections.OfType<DrilledHolesSection>().SingleOrDefault();
-            if (drilledHolesSection != null)
-            {
-                DrilledHoles = new List<DrilledHole>(drilledHolesSection.DrilledHoles);
-            }
+            var drilledHolesSection = this.sections.OfType<DrilledHolesSection>().SingleOrDefault() ?? new DrilledHolesSection();
+            DrilledHoles = new List<DrilledHole>(drilledHolesSection.DrilledHoles);
 
-            var notesSection = this.sections.OfType<NotesSection>().SingleOrDefault();
-            if (notesSection != null)
-            {
-                Notes = new List<Note>(notesSection.Notes);
-            }
+            var notesSection = this.sections.OfType<NotesSection>().SingleOrDefault() ?? new NotesSection();
+            Notes = new List<Note>(notesSection.Notes);
 
-            var placementSection = this.sections.OfType<ComponentPlacementSection>().SingleOrDefault();
-            if (placementSection != null)
-            {
-                ComponentPlacements = new List<ComponentPlacement>(placementSection.Placements);
-            }
+            var placementSection = this.sections.OfType<ComponentPlacementSection>().SingleOrDefault() ?? new ComponentPlacementSection();
+            ComponentPlacements = new List<ComponentPlacement>(placementSection.Placements);
         }
 
         protected AbstractSection[] GetCommonSections()
@@ -80,9 +75,22 @@ namespace IDFv3Net
             list.AddRange(ViaKeepouts);
             list.AddRange(PlacementKeepouts);
             list.AddRange(PlacementGroupAreas);
-            list.Add(new DrilledHolesSection() { DrilledHoles = this.DrilledHoles.ToArray() });
-            list.Add(new NotesSection() { Notes = this.Notes.ToArray() });
-            list.Add(new ComponentPlacementSection() {  Placements = this.ComponentPlacements.ToArray() });
+
+            if (this.DrilledHoles.Count > 0)
+            {
+                list.Add(new DrilledHolesSection() { DrilledHoles = this.DrilledHoles.ToArray() });
+            }
+
+            if (this.Notes.Count > 0)
+            {
+                list.Add(new NotesSection() { Notes = this.Notes.ToArray() });
+            }
+
+            if (this.ComponentPlacements.Count > 0)
+            {
+                list.Add(new ComponentPlacementSection() { Placements = this.ComponentPlacements.ToArray() });
+            }
+
             return list.ToArray();
         }
     }

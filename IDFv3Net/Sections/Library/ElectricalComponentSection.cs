@@ -12,7 +12,7 @@ namespace IDFv3Net.Sections
         [LengthUnit]
         public float ComponentHeight = 0;
 
-        public Geometry[] Geometry = new  Geometry[0];
+        public Geometry[] Geometry = new Geometry[0];
 
         public Property[] Properties = new Property[0];
     }

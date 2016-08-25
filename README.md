@@ -1,7 +1,5 @@
 # IDFv3Net
-An easy to use library for working with IDFv3 files in C#.NET
-Board / Panel Files: *.emn
-Library files: *.emp
+An easy to use library for working with IDFv3 files in C#.NET. This library will handle Board/Panel Files (*.emn) and Library files (*.emp)
 
 ##Features
 - Reading and writing IDFv3 formatted files

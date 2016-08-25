@@ -16,6 +16,10 @@ namespace IDFv3Net
         {
             Header = new Sections.LibraryHeaderSection();
             Header.FileType = FileType.LIBRARY_FILE;
+            Header.IDFVersionNumber = 3;
+            Header.LibraryFileVersion = 1;
+            Header.SourceSystemId = "";
+
             ElectricalComponents = new List<ElectricalComponentSection>();
             MechanicalComponents = new List<MechanicalComponentSection>();
         }
@@ -24,6 +28,7 @@ namespace IDFv3Net
         {
             Header = this.sections.OfType<LibraryHeaderSection>().SingleOrDefault();
             if (Header == null) throw new Exception("Header section not found.");
+            if (Header.FileType != FileType.LIBRARY_FILE) throw new Exception("FileType is not a Library file");
             ElectricalComponents = this.sections.OfType<ElectricalComponentSection>().ToList();
             MechanicalComponents = this.sections.OfType<MechanicalComponentSection>().ToList();
         }

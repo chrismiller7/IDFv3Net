@@ -10,11 +10,29 @@ namespace IDFv3Net.Extensions
         public static void FlipHorizontal(this IDFFile file)
         {
             GetAllPoints(file).ToList().ForEach(s => s.X = -s.X);
+
+            var compPlaceSection = file.GetAllSections().OfType<ComponentPlacementSection>().FirstOrDefault();
+            if (compPlaceSection != null)
+            {
+                foreach (var placement in compPlaceSection.Placements)
+                {
+                    placement.RotationAngle *= -1;
+                }
+            }
         }
 
         public static void FlipVertical(this IDFFile file)
         {
             GetAllPoints(file).ToList().ForEach(s => s.Y = -s.Y);
+
+            var compPlaceSection = file.GetAllSections().OfType<ComponentPlacementSection>().FirstOrDefault();
+            if (compPlaceSection != null)
+            {
+                foreach (var placement in compPlaceSection.Placements)
+                {
+                    placement.RotationAngle *= -1;
+                }
+            }
         }
 
         public static void Translate(this IDFFile file, float X, float Y)
@@ -32,11 +50,27 @@ namespace IDFv3Net.Extensions
             var rads = angleDegrees * 2.0f * Math.PI / 360.0f;
             foreach (var pt in GetAllPoints(file))
             {
-                var nx = pt.X * Math.Cos(rads) + pt.Y * Math.Sin(rads);
+                var nx = pt.X * Math.Cos(rads) - pt.Y * Math.Sin(rads);
                 var ny = pt.Y * Math.Cos(rads) + pt.X * Math.Sin(rads);
                 pt.X = (float)nx;
                 pt.Y = (float)ny;
             }
+
+            var compPlaceSection = file.GetAllSections().OfType<ComponentPlacementSection>().FirstOrDefault();
+            if (compPlaceSection != null)
+            {
+                foreach (var placement in compPlaceSection.Placements)
+                {
+                    placement.RotationAngle += angleDegrees;
+                }
+            }
+        }
+
+        public static void Rotate(this IDFFile file, float angleDegrees, float centerX, float centerY)
+        {
+            Translate(file, -centerX, -centerY);
+            Rotate(file, angleDegrees);
+            Translate(file, centerX, centerY);
         }
 
         public static BoundingBox GetBoundingBox(this IDFFile file)
@@ -74,6 +108,39 @@ namespace IDFv3Net.Extensions
             size.Width = bounds.Max.X - bounds.Min.X;
             size.Height = bounds.Max.Y - bounds.Min.Y;
             return size;
+        }
+
+        public static Geometry[] GetTranslation(this Geometry[] geom, float x, float y)
+        {
+            List<Geometry> list = new List<Sections.Geometry>();
+            foreach (var pt in geom)
+            {
+                Geometry g = new Sections.Geometry();
+                g.Point.X = pt.Point.X + x;
+                g.Point.Y = pt.Point.Y + y;
+                g.Angle = pt.Angle;
+                g.LoopLabel = pt.LoopLabel;
+                list.Add(g);
+            }
+            return list.ToArray();
+        }
+
+        public static Geometry[] GetRotation(this Geometry[] geom, float angleDegrees)
+        {
+            List<Geometry> list = new List<Sections.Geometry>();
+
+            var rads = angleDegrees * 2.0f * Math.PI / 360.0f;
+            foreach (var pt in geom)
+            {
+                var g = new Geometry();
+                g.Point.X = (float)(pt.Point.X * Math.Cos(rads) - pt.Point.Y * Math.Sin(rads));
+                g.Point.Y = (float)(pt.Point.Y * Math.Cos(rads) + pt.Point.X * Math.Sin(rads));
+                g.Angle = pt.Angle;
+                g.LoopLabel = pt.LoopLabel;
+                list.Add(g);
+            }
+
+            return list.ToArray();
         }
 
         public static IEnumerable<Point> GetAllPoints(this IDFFile file)

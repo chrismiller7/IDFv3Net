@@ -10,7 +10,7 @@ namespace IDFv3Net.Sections
         public string OutlineID = "";
         [LengthUnit]
         public float ExtrudeThickness=0;
-        public OtherOutlineBoardSide BoardSide = OtherOutlineBoardSide.TOP;
+        public ComponentPlacementSide BoardSide = ComponentPlacementSide.TOP;
 
         public Geometry[] Geometry = new  Geometry[0];
     }
