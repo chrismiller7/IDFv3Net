@@ -10,20 +10,18 @@ namespace IDFv3Net.Extensions
         public static void FlipHorizontal(this IDFFile file)
         {
             GetAllPoints(file).ToList().ForEach(s => s.X = -s.X);
-
-            var compPlaceSection = file.GetAllSections().OfType<ComponentPlacementSection>().FirstOrDefault();
-            if (compPlaceSection != null)
-            {
-                foreach (var placement in compPlaceSection.Placements)
-                {
-                    placement.RotationAngle *= -1;
-                }
-            }
+            FlipRotation(file);
         }
 
         public static void FlipVertical(this IDFFile file)
         {
             GetAllPoints(file).ToList().ForEach(s => s.Y = -s.Y);
+            FlipRotation(file);
+        }
+
+        static void FlipRotation(this IDFFile file)
+        {
+            GetAllGeometry(file).ToList().ForEach(s => s.LoopLabel = s.LoopLabel == 0 ? 1 : 0);
 
             var compPlaceSection = file.GetAllSections().OfType<ComponentPlacementSection>().FirstOrDefault();
             if (compPlaceSection != null)
